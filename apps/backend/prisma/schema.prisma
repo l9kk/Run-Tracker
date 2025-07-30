@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // bcrypt hash
+  runs      Run[]
+  createdAt DateTime @default(now())
+}
+
+model Run {
+  id            String   @id @default(cuid())
+  userId        String
+  date          DateTime @default(now())
+  locationText  String
+  lat           Float?
+  lon           Float?
+  distanceKm    Decimal   @db.Decimal(6,2) // 0.00 to 9999.99 km is plenty
+  durationSec   Int
+  paceSecPerKm  Int
+  photoUrl      String?
+  aiTitle       String?
+  aiNote        String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, date])
+  @@map("runs")
+}
