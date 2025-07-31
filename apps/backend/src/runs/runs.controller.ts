@@ -139,10 +139,8 @@ export class RunsController {
     async getRunningInsights(@Request() req: any) {
 
         const runs = await this.runsService.findAll(req.user.id);
-        console.log('🔍 Retrieved runs count:', runs.length);
 
         const insights = await this.openaiService.generateRunningInsights(runs);
-        console.log('🔍 Generated insights:', insights);
 
         return { insights };
     }

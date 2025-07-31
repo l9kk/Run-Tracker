@@ -50,7 +50,7 @@ export default function AchievementCelebration({
       const data = await response.json();
       setCelebration(data.celebration);
       setHasGenerated(true);
-    } catch (err) {
+    } catch {
       setCelebration('🎉 Amazing achievement! You crushed your personal record!');
       setHasGenerated(true);
     } finally {

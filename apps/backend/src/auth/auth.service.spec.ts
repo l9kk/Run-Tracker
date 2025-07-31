@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
-import { UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
+import { InvalidCredentialsException, UserNotFoundException } from '../common/exceptions/auth.exceptions';
 
 jest.mock('bcrypt');
 const mockedBcrypt = bcrypt as jest.Mocked<typeof bcrypt>;
@@ -70,10 +70,10 @@ describe('AuthService', () => {
             });
         });
 
-        it('should throw UnauthorizedException when user is not found', async () => {
+        it('should throw UserNotFoundException when user is not found', async () => {
             (prismaService.user.findUnique as jest.Mock).mockResolvedValue(null);
 
-            await expect(service.validateUser('nonexistent')).rejects.toThrow(UnauthorizedException);
+            await expect(service.validateUser('nonexistent')).rejects.toThrow(UserNotFoundException);
         });
     });
 
@@ -108,7 +108,7 @@ describe('AuthService', () => {
             });
         });
 
-        it('should throw UnauthorizedException when user is not found', async () => {
+        it('should throw InvalidCredentialsException when user is not found', async () => {
             const loginDto: LoginDto = {
                 email: 'nonexistent@example.com',
                 password: 'password123',
@@ -116,10 +116,10 @@ describe('AuthService', () => {
 
             (prismaService.user.findUnique as jest.Mock).mockResolvedValue(null);
 
-            await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
+            await expect(service.login(loginDto)).rejects.toThrow(InvalidCredentialsException);
         });
 
-        it('should throw UnauthorizedException when password is invalid', async () => {
+        it('should throw InvalidCredentialsException when password is invalid', async () => {
             const loginDto: LoginDto = {
                 email: 'test@example.com',
                 password: 'wrongpassword',
@@ -128,7 +128,7 @@ describe('AuthService', () => {
             (prismaService.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
             mockedBcrypt.compare.mockResolvedValue(false as never);
 
-            await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
+            await expect(service.login(loginDto)).rejects.toThrow(InvalidCredentialsException);
         });
     });
 });

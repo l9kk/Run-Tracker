@@ -40,7 +40,7 @@ export class AuthClient {
         try {
             const response = await this.request('/auth/me');
             return response.ok;
-        } catch (_error) {
+        } catch {
             return false;
         }
     }
@@ -49,7 +49,7 @@ export class AuthClient {
         try {
             const response = await this.request('/auth/me');
             return await response.json();
-        } catch (_error) {
+        } catch {
             return null;
         }
     }
