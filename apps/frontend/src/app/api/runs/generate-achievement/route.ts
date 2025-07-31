@@ -3,14 +3,22 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
+        const authToken = request.headers.get('authorization')?.replace('Bearer ', '');
         const cookieHeader = request.headers.get('cookie');
+
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        if (authToken) {
+            headers['Authorization'] = `Bearer ${authToken}`;
+        } else if (cookieHeader) {
+            headers['Cookie'] = cookieHeader;
+        }
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/runs/generate-achievement`, {
             method: 'POST',
-            headers: {
-                'Cookie': cookieHeader || '',
-                'Content-Type': 'application/json',
-            },
+            headers,
             body: JSON.stringify(body),
         });
 

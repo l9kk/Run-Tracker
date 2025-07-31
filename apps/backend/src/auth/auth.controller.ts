@@ -98,6 +98,7 @@ export class AuthController {
         return {
             message: 'Login successful',
             user: result.user,
+            token: result.token,
         };
     }
 

@@ -27,13 +27,22 @@ export class AuthClient {
             body: JSON.stringify({ email, password }),
         });
 
-        return response.json();
+        const data = await response.json();
+        
+        if (data.token) {
+            localStorage.setItem('auth_token', data.token);
+        }
+        
+        return data;
     }
 
     static async logout() {
         await this.request('/auth/logout', {
             method: 'POST',
         });
+        
+        // Clear stored token
+        localStorage.removeItem('auth_token');
     }
 
     static async checkSession() {

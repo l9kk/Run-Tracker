@@ -1,16 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-
     try {
+        const authToken = request.headers.get('authorization')?.replace('Bearer ', '');
         const cookieHeader = request.headers.get('cookie');
+
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        if (authToken) {
+            headers['Authorization'] = `Bearer ${authToken}`;
+        } else if (cookieHeader) {
+            headers['Cookie'] = cookieHeader;
+        }
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/runs/insights`, {
             method: 'GET',
-            headers: {
-                'Cookie': cookieHeader || '',
-                'Content-Type': 'application/json',
-            },
+            headers,
         });
 
         console.log('Response status:', response.status);
