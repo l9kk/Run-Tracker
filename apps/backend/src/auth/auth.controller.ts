@@ -92,6 +92,7 @@ export class AuthController {
             secure: this.configService.get('NODE_ENV') === 'production',
             sameSite: this.configService.get('NODE_ENV') === 'production' ? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000,
+            path: '/',
         });
 
         return {
@@ -113,7 +114,7 @@ export class AuthController {
         }
     })
     async logout(@Res({ passthrough: true }) res: Response) {
-        res.clearCookie('access_token');
+        res.clearCookie('access_token', { path: '/' });
         return { message: 'Logout successful' };
     }
 
