@@ -3,6 +3,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
     getHello(): string {
-        return 'Run Tracker API is running! 🏃‍♂️';
+        return 'Run Tracker API is running!';
     }
 }

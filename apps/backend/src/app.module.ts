@@ -4,6 +4,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { RunsModule } from './runs/runs.module';
+import { UploadModule } from './upload/upload.module';
+import { OpenAIModule } from './openai/openai.module';
 
 @Module({
     imports: [
@@ -12,6 +15,9 @@ import { PrismaModule } from './prisma/prisma.module';
         }),
         AuthModule,
         PrismaModule,
+        RunsModule,
+        UploadModule,
+        OpenAIModule,
     ],
     controllers: [AppController],
     providers: [AppService],

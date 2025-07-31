@@ -25,9 +25,10 @@ model Run {
   locationText  String
   lat           Float?
   lon           Float?
-  distanceKm    Decimal   @db.Decimal(6,2) // 0.00 to 9999.99 km is plenty
+  distanceKm    Decimal   @db.Decimal(6,2)
   durationSec   Int
   paceSecPerKm  Int
+  description   String?
   photoUrl      String?
   aiTitle       String?
   aiNote        String?
