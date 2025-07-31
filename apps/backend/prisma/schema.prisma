@@ -28,7 +28,6 @@ model Run {
   distanceKm    Decimal   @db.Decimal(6,2)
   durationSec   Int
   paceSecPerKm  Int
-  description   String?
   photoUrl      String?
   aiTitle       String?
   aiNote        String?
