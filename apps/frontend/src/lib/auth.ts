@@ -4,13 +4,20 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export class AuthClient {
     private static async request(endpoint: string, options: RequestInit = {}) {
+        const authToken = localStorage.getItem('auth_token');
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+            ...(options.headers as Record<string, string>),
+        };
+
+        if (authToken) {
+            headers['Authorization'] = `Bearer ${authToken}`;
+        }
+
         const response = await fetch(`${API_URL}${endpoint}`, {
             ...options,
             credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers,
-            },
+            headers,
         });
 
         if (!response.ok) {
@@ -41,7 +48,6 @@ export class AuthClient {
             method: 'POST',
         });
         
-        // Clear stored token
         localStorage.removeItem('auth_token');
     }
 
